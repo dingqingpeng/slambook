@@ -1,3 +1,0 @@
-/home/dingqingpeng/Documents/SLAM/SRC/ch4/build/CMakeFiles/edit_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch4/build/CMakeFiles/rebuild_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch4/build/CMakeFiles/useSophus.dir

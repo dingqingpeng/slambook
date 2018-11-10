@@ -1,4 +1,0 @@
-/home/dingqingpeng/Documents/SLAM/SRC/ch3/useGeometry/build/CMakeFiles/rebuild_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch3/useGeometry/build/CMakeFiles/edit_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch3/useGeometry/build/CMakeFiles/extractBlock.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch3/useGeometry/build/CMakeFiles/useGeometry.dir

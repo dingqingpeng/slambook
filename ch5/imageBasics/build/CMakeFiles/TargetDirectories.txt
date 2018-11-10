@@ -1,4 +1,0 @@
-/home/dingqingpeng/Documents/SLAM/SRC/ch5/build/CMakeFiles/edit_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch5/build/CMakeFiles/test.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch5/build/CMakeFiles/rebuild_cache.dir
-/home/dingqingpeng/Documents/SLAM/SRC/ch5/build/CMakeFiles/imageBasics.dir
