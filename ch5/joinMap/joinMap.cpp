@@ -77,7 +77,7 @@ int main(int argc, char const *argv[])
     			p.z = pointWorld[2];
     			p.b = color.data[ v * color.step + u * color.channels() ];
     			p.g = color.data[ v * color.step + u * color.channels() + 1 ];
-    			p.r = color.data[ v * color.step + u * color.channels() + 1 ];
+    			p.r = color.data[ v * color.step + u * color.channels() + 2 ];
     			pointCloud->points.push_back(p);
     		}
     	}
