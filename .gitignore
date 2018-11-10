@@ -1,10 +1,10 @@
-./ch2/build/
+ch2/build/
 
-./ch3/ex-7/build/
-./ch3/useEigen/build/
-./ch3/useGeometry/build/
+ch3/ex-7/build/
+ch3/useEigen/build/
+ch3/useGeometry/build/
 
-./ch4/build/
+ch4/build/
 
-./ch5/imageBasics/build/
-./ch5/joinMap/build/
+ch5/imageBasics/build/
+ch5/joinMap/build/
