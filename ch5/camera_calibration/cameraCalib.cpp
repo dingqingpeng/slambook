@@ -9,6 +9,12 @@ using namespace cv;
 class Settings
 {
 public:
+    /* Brief: import data from filenode
+    * Parameters:
+    *     node -- reference to FileNode
+    * Return:
+    *     Void
+    */
     void read(const FileNode& node)
     {
         node["BoardSize_Width"]  >> boardSize.width;
@@ -16,12 +22,37 @@ public:
         node["Square_Size"]      >> squareSize;
         node["Calibrate_Pattern"]>> patternToUse;
         node["Calibrate_NrOfFrameToUse"] >> nrFrames;
+        validate();
+    }
+    void validate()
+    {
+        validInput = true;
+        
+        if (boardSize.width <= 0 || boardSize.height<= 0) 
+        {
+            cerr << "Invalid board size." << endl;
+            validInput = false;
+        }
+        if (squareSize < 1e-6)
+        {
+            cerr << "Invalid square size." << endl;
+            validInput = false;
+        }
+        if (nrFrames <= 0)
+        {
+            cerr << "Invalid number of frame." << endl;
+            validInput = false;
+        }
+        
+        
     }
 public:
     Size  boardSize;     // Size of the board, number of items
     float squareSize;    // The size of a square in some user defined metric system (pixel, millimeter)
     string patternToUse;
     int nrFrames;        // The number of frames to use for calibration
+    
+    bool validInput;     // True if the setting file passes validation
 };
 
 /* Brief: Print program info
