@@ -9,3 +9,6 @@ ch4/build/
 ch5/imageBasics/build/
 ch5/joinMap/build/
 ch5/camera_calibration/build/
+
+ch6/ceres_curve_fitting/build/
+ch6/g2o_curve_fitting/build/
