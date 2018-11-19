@@ -112,10 +112,10 @@ int main(int argc, char const *argv[])
             imagePoints.push_back(pointBuf);
             // Draw the corners
             drawChessboardCorners(view, s.boardSize, Mat(pointBuf), found);
-            // namedWindow("chessboard", 0);
-            // resizeWindow("chessboard", 1000, 1000);
-            // imshow("chessboard", view);
-            // waitKey(0);
+            namedWindow("chessboard", 0);
+            resizeWindow("chessboard", 1000, 1000);
+            imshow("chessboard", view);
+            waitKey(0);
         }
         //! End of [Pattern found]
     }
