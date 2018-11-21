@@ -16,8 +16,8 @@ int main(int argc, char const *argv[])
     }
 
     // Import images
-    Mat imag1 = imread( argv[1], CV_LOAD_IMAGE_COLOR );
-    Mat imag2 = imread( argv[2], CV_LOAD_IMAGE_COLOR );
+    Mat img1 = imread( argv[1], CV_LOAD_IMAGE_COLOR );
+    Mat img2 = imread( argv[2], CV_LOAD_IMAGE_COLOR );
 
     // Initialization
     vector<KeyPoint> keypoints1, keypoints2;
@@ -27,16 +27,16 @@ int main(int argc, char const *argv[])
     Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
 
     // 1. Detect Oriented FAST corner points
-    detector->detect( imag1, keypoints1 );
-    detector->detect( imag2, keypoints2 );
+    detector->detect( img1, keypoints1 );
+    detector->detect( img2, keypoints2 );
 
     // 2. Compute BRIEF descriptor
-    descriptor->compute( imag1, keypoints1, descriptor1 );
-    descriptor->compute( imag2, keypoints2, descriptor2 );
+    descriptor->compute( img1, keypoints1, descriptor1 );
+    descriptor->compute( img2, keypoints2, descriptor2 );
 
-    Mat outimag;
-    drawKeypoints( imag1, keypoints1, outimag, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-    imshow( "ORB Feature points", outimag );
+    Mat outimg;
+    drawKeypoints( img1, keypoints1, outimg, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+    imshow( "ORB Feature points", outimg );
     // waitKey(0);
 
     // 3. Pair BRIEF descriptors in two images, using Hamming distance
@@ -46,7 +46,7 @@ int main(int argc, char const *argv[])
     // 4. Select pairs
     double min_dist = 10000, max_dist = 0;
     // Find minimum and maximum distance of all pairs
-    for(int i = 0; i < descriptor1.rows; i++)
+    for(int i = 0; i < (int)matches.size(); i++)
     {
         double dist = matches[i].distance;
         if(dist < min_dist) min_dist = dist;
@@ -69,8 +69,8 @@ int main(int argc, char const *argv[])
     // 5. Draw pair result
     Mat img_match;
     Mat img_goodMatch;
-    drawMatches(imag1, keypoints1, imag2, keypoints2, matches, img_match);
-    drawMatches(imag1, keypoints1, imag2, keypoints2, good_matches, img_goodMatch);
+    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_match);
+    drawMatches(img1, keypoints1, img2, keypoints2, good_matches, img_goodMatch);
     imshow( "All pairs", img_match );
     imshow( "Selected pairs", img_goodMatch );
     waitKey(0);

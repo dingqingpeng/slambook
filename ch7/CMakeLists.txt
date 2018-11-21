@@ -1,5 +1,5 @@
 cmake_minimum_required( VERSION 2.8 )
-project( feature_extraction )
+project( VO1 )
 
 # Add C++ 11 Standard support
 set( CMAKE_CXX_FLAGS "-std=c++11" )
@@ -20,3 +20,6 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # Add an executable file
 add_executable( feature_extraction feature_extraction.cpp )
 target_link_libraries( feature_extraction ${OpenCV_LIBS} )
+
+add_executable( pose_2d2d pose_estimation_2d2d.cpp )
+target_link_libraries( pose_2d2d ${OpenCV_LIBS} )
