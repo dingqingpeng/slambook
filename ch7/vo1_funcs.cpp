@@ -3,7 +3,15 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
-#include <typeinfo>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <g2o/core/base_vertex.h>
+#include <g2o/core/base_unary_edge.h>
+#include <g2o/core/block_solver.h>
+#include <g2o/solvers/csparse/linear_solver_csparse.h>
+#include <g2o/core/optimization_algorithm_levenberg.h>
+#include <g2o/types/sba/types_six_dof_expmap.h>
+#include <chrono>
 
 using namespace std;
 using namespace cv;
@@ -80,24 +88,25 @@ void pose_estimation_2d2d(const std::vector<cv::KeyPoint>& keypoints1,
     // Compute fundamental matrix F
     Mat fundamental_matrix;
     fundamental_matrix = findFundamentalMat(points1, points2, CV_FM_8POINT);
-    cout << "Fundamental matrix is " << endl << fundamental_matrix << endl;
+    cout << "-- Fundamental matrix is " << endl << fundamental_matrix << endl << endl;
 
     // Compute essential matrix E
     Point2d principle_point(325.1, 249.7);      // Camera optical center, TUM dataset calibration data
     double focal_length = 521;                  // Camera focal length, TUM dataset calibration data
     Mat essential_matrix;
     essential_matrix = findEssentialMat(points1, points2, focal_length, principle_point);
-    cout << "Essential matrix is " << endl << essential_matrix << endl;
+    cout << "-- Essential matrix is " << endl << essential_matrix << endl << endl;
 
     // Compute homography matrix H
     Mat homography_matrix;
     homography_matrix = findHomography(points1, points2, RANSAC, 3);
-    cout << "Homography matrix is " << endl << homography_matrix << endl;
+    cout << "-- Homography matrix is " << endl << homography_matrix << endl << endl;
 
     // Recover rotation and translate from E
     recoverPose(essential_matrix, points1, points2, R, t, focal_length, principle_point);
-    cout << "R = " << endl << R << endl;
-    cout << "t = " << endl << t << endl;
+    cout << "-- R = " << endl << R << endl << endl;
+    cout << "-- t = " << endl << t << endl << endl;
+    cout << "-----------------------------" << endl;
 }
 
 cv::Point2f pixel2cam( const cv::Point2d& p, const cv::Mat& K )
@@ -149,4 +158,72 @@ void triangulation(const std::vector<cv::KeyPoint>& keypoints1,
                    x.at<float>(2, 0) );
         points.push_back( p );
     }
+}
+
+void bundleAdjustment(const std::vector<cv::Point3f>& pts_3d,
+                      const std::vector<cv::Point2f>& pts_2d,
+                      const cv::Mat& K,
+                      cv::Mat& R,
+                      cv::Mat& t)
+{
+    // Initialize g2o
+    typedef g2o::BlockSolver< g2o::BlockSolverTraits<6, 3> > Block; // Dimention of pose is 6, dimention of landmark is 3
+    Block::LinearSolverType* linearSolver = new g2o::LinearSolverCSparse<Block::PoseMatrixType>();  // Linear solver
+    Block* solver_ptr = new Block( linearSolver );
+    g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg( solver_ptr );
+    g2o::SparseOptimizer optimizer;
+    optimizer.setAlgorithm( solver );
+
+    // Vertex
+    g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();    // Camera pose
+    Eigen::Matrix3d R_mat;
+    R_mat << R.at<double>(0, 0), R.at<double>(0, 1), R.at<double>(0, 2),
+             R.at<double>(1, 0), R.at<double>(1, 1), R.at<double>(1, 2),
+             R.at<double>(2, 0), R.at<double>(2, 1), R.at<double>(2, 2);
+    pose->setId(0);
+    pose->setEstimate( g2o::SE3Quat(R_mat,
+                                    Eigen::Vector3d( t.at<double>(0, 0), t.at<double>(1, 0), t.at<double>(2, 0) )) );
+    optimizer.addVertex( pose );
+
+    int index = 1;
+    for(const Point3f p:pts_3d)     // Landmarks
+    {
+        g2o::VertexSBAPointXYZ* point = new g2o::VertexSBAPointXYZ();
+        point->setId(index++);
+        point->setEstimate(Eigen::Vector3d( p.x, p.y, p.z ));
+        point->setMarginalized( true );
+        optimizer.addVertex( point );
+    }
+
+    // Parameter: Camera intrinsics
+    g2o::CameraParameters* camera = new g2o::CameraParameters( K.at<double>(0, 0),
+                                                               Eigen::Vector2d( K.at<double>(0, 2), K.at<double>(1, 2) ),
+                                                               0 );
+    camera->setId(0);
+    optimizer.addParameter( camera );
+
+    // Edges
+    index = 1;
+    for( const Point2f p:pts_2d )
+    {
+        g2o::EdgeProjectXYZ2UV* edge = new g2o::EdgeProjectXYZ2UV();
+        edge->setId( index );
+        edge->setVertex( 0, dynamic_cast<g2o::VertexSBAPointXYZ*>( optimizer.vertex( index ) ) );
+        edge->setVertex( 1, pose );
+        edge->setMeasurement( Eigen::Vector2d( p.x, p.y ) );
+        edge->setParameterId( 0, 0 );
+        edge->setInformation( Eigen::Matrix2d::Identity() );
+        optimizer.addEdge( edge );
+        index++;
+    }
+
+    chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+    optimizer.setVerbose( true );
+    optimizer.initializeOptimization();
+    optimizer.optimize( 100 );
+    chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+    chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double>>( t2-t1 );
+    cout << "Optimization costs " << time_used.count() << " seconds." << endl;
+    cout << endl << "After optimization, T = " << endl;
+    cout << Eigen::Isometry3d( pose->estimate() ).matrix() << endl;
 }

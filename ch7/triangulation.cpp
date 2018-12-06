@@ -44,8 +44,8 @@ int main(int argc, char const *argv[])
         // Project 3D point on the normalized plane
         Point2d pt1_3d( points[i].x / points[i].z,
                         points[i].y / points[i].z );
-        cout << "point in the first camera frame: " << pt1 << endl;
-        cout << "piont projected from 3d point:   " << pt1_3d << endl;
+        cout << "point in the first camera frame:  " << pt1 << endl;
+        cout << "piont projected from 3d point:    " << pt1_3d << endl;
 
         // The second frame
         // Convert feature point coordinate to normalized plane
@@ -53,9 +53,8 @@ int main(int argc, char const *argv[])
         // Project 3D point on the normalized plane
         Mat pt2_3d_trans = R * ( Mat_<double>(3, 1) << points[i].x, points[i].y, points[i].z ) + t;
         pt2_3d_trans /= pt2_3d_trans.at<double>(2, 0);
-        cout << "point in the first camera frame: " << pt2 << endl;
-        cout << "piont projected from 3d point:   " << pt2_3d_trans.t() << endl;
-
+        cout << "point in the second camera frame: " << pt2 << endl;
+        cout << "piont projected from 3d point:    " << pt2_3d_trans.t() << endl;
         cout << "-----------------------------" << endl;
     }
 

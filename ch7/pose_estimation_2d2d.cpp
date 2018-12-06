@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
         Point2d pt2 = pixel2cam( keypoints2[m.trainIdx].pt, K );
         Mat y2 = ( Mat_<double>(3,1) << pt2.x, pt2.y, 1 );
         Mat d = y2.t() * t_x * R * y1;
-        cout << "epipolar constraint = " << d << endl;
+        // cout << "epipolar constraint = " << d << endl;
     }
 
     return 0;

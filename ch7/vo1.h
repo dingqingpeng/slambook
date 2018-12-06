@@ -64,4 +64,20 @@ void triangulation(const std::vector<cv::KeyPoint>& keypoints1,
  */
 cv::Point2f pixel2cam( const cv::Point2d& p, const cv::Mat& K );
 
+/* Brief: Bundle Adjustment 
+ * Parameters:
+ *     pts_3d -- 3D points position under world / first camera coordinate
+ *     pts_2d -- 2D points position coresponding to pts_3d
+ *     K -- Camera intrinsics
+ *     R -- rotation matrix
+ *     t -- translation vector
+ * Return:
+ *     void
+ */
+void bundleAdjustment(const std::vector<cv::Point3f>& pts_3d,
+                      const std::vector<cv::Point2f>& pts_2d,
+                      const cv::Mat& K,
+                      cv::Mat& R,
+                      cv::Mat& t);
+
 #endif
