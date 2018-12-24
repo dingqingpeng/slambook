@@ -2,6 +2,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
+#include <chrono>
+
+#define DEBUG
 
 using namespace std;
 using namespace cv;
@@ -25,6 +28,10 @@ int main(int argc, char const *argv[])
     Ptr<FeatureDetector> detector = ORB::create();
     Ptr<DescriptorExtractor> descriptor = ORB::create();
     Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
+
+#ifdef DEBUG
+    std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+#endif
 
     // 1. Detect Oriented FAST corner points
     detector->detect( img1, keypoints1 );
@@ -66,6 +73,12 @@ int main(int argc, char const *argv[])
         
     }
     
+#ifdef DEBUG
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> time_used = std::chrono::duration_cast<std::chrono::duration<double>>( t2-t1 );
+    std::cout << "-- Time consumption: " << time_used.count()*1000 << " ms" << std::endl;
+#endif
+
     // 5. Draw pair result
     Mat img_match;
     Mat img_goodMatch;
