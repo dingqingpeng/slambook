@@ -14,3 +14,7 @@ ch6/ceres_curve_fitting/build/
 ch6/g2o_curve_fitting/build/
 
 ch7/build/
+
+ch8/LKFlow/build/
+ch8/directMethod/build/
+ch8/data/
