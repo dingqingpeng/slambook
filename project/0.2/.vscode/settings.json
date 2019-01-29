@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "complex": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "vector": "cpp",
+        "deque": "cpp"
     }
 }

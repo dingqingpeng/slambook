@@ -11,15 +11,15 @@ namespace myslam
 class Map
 {
 public:
-    Map();
-
-    void insertKeyFrame( Frame::Ptr frame );
-    void insertMapPoint( MapPoint::Ptr map_point );
-
-public:
     typedef std::shared_ptr<Map> Ptr;
     unordered_map<unsigned long, MapPoint::Ptr> map_points_;
     unordered_map<unsigned long,    Frame::Ptr> keyframes_;
+
+public:
+    Map() {}
+
+    void insertKeyFrame( Frame::Ptr frame );
+    void insertMapPoint( MapPoint::Ptr map_point );
 };
 
 }

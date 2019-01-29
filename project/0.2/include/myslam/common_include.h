@@ -18,6 +18,7 @@ using Eigen::Vector3d;
 // Sophus
 #include <sophus/se3.h>
 using Sophus::SE3;
+using Sophus::SO3;
 
 // OpenCV
 #include <opencv2/core/core.hpp>

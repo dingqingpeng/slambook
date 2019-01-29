@@ -16,7 +16,7 @@ public:
 
     bool addFrame( Frame::Ptr frame );
 
-private:
+protected:
     void extractKeypoints();
     void computeDescriptors();
     void featureMatching();
@@ -48,6 +48,10 @@ public:
     vector<cv::DMatch>   feature_matches_;
 
     SE3 Tcr_estimated_;
+
+    int num_of_features_;
+    double scale_factor_;
+    int level_pyramid_;
     int num_inliers_;
     int min_inliers_;
     int num_lost_;

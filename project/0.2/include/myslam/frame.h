@@ -10,6 +10,14 @@ namespace myslam
 class Frame
 {
 public:
+    typedef std::shared_ptr<Frame> Ptr;
+    unsigned long                  id_;
+    double                         time_stamp_;
+    SE3                            T_c_w_;
+    Camera::Ptr                    camera_;
+    Mat                            color_, depth_;
+
+public:
     Frame();
 
     Frame( long id, double time_stamp = 0, 
@@ -19,19 +27,11 @@ public:
     // Factory function
     static Frame::Ptr createFrame();
 
-    double findDepth( const cv::KeyPoint kp );
+    double findDepth( const cv::KeyPoint& kp );
 
     Vector3d getCamCenter() const;
 
     bool isInFrame( const Vector3d& pt_world );
-
-public:
-    typedef std::shared_ptr<Frame> Ptr;
-    unsigned long                  id_;
-    double                         time_stamp_;
-    SE3                            T_c_w_;
-    Camera::Ptr                    camera_;
-    Mat                            color_, depth_;
 };
 
 }

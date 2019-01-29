@@ -17,7 +17,7 @@ Frame::Ptr Frame::createFrame()
     return Frame::Ptr( new Frame( factory_id++ ) );
 }
 
-double Frame::findDepth( const cv::KeyPoint kp )
+double Frame::findDepth( const cv::KeyPoint& kp )
 {
     int x = cvRound( kp.pt.x );
     int y = cvRound( kp.pt.y );
@@ -44,7 +44,7 @@ Vector3d Frame::getCamCenter() const
     return T_c_w_.inverse().translation();
 }
 
-bool isInFrame( const Vector3d& pt_world )
+bool Frame::isInFrame( const Vector3d& pt_world )
 {
     Vector3d p_cam = camera_->world2camera( pt_world, T_c_w_ );
     if( p_cam( 2, 0 ) < 0 )
