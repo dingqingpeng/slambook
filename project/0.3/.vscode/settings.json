@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "complex": "cpp",
+        "chrono": "cpp",
+        "vector": "cpp",
+        "deque": "cpp",
+        "core": "cpp",
+        "iostream": "cpp"
+    }
+}
