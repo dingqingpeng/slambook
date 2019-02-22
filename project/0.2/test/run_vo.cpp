@@ -107,7 +107,7 @@ int main(int argc, char const *argv[])
         cv::namedWindow( "image" );
         cv::moveWindow( "image", 20, 1080/2 );
         cv::imshow("image", color );
-        cv::waitKey(50);
+        cv::waitKey(1);
         vis.setWidgetPose( "Camera", M);
         vis.spinOnce(1, false);
 

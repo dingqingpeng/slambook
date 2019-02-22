@@ -98,7 +98,7 @@ void VisualOdometry::featureMatching()
     feature_matches_.clear();
     for(cv::DMatch& m: matches)
     {
-        if (m.distance <= max<float>(match_ratio_*min_dist, 30.0))
+        if (m.distance < max<float>(match_ratio_*min_dist, 30.0))
         {
             feature_matches_.push_back(m);
         }
